@@ -18,28 +18,28 @@ OrgType = TypeVar('OrgType')
 
 class BusinessPostResponse(BaseModel):
     id: str
-    annual_turnover: str | None
-    business_model: bytes | None
+    annual_turnover: str
+    business_model: str
     company_size: str | CompanySize
     company_type: str | CompanyType
     description: str
-    employees: list[User] | None
-    id_document: bytes | None
-    id_document_verified_at: datetime | None
+    employees: list
+    ID_document: str
+    ID_document_verified_at: str | None
     industry: Industry | str
-    investors: list[Business] | None
-    locations: list[BusinessLocation] | None
-    markets: list[BusinessMarket] | None
+    investors: list
+    locations: list
+    markets: list
     name: str
     org_type: OrgType | str
-    partners: list[Business] | None
+    partners: list
     payment: Payment | str | None
-    payment_verified_at: datetime | None
-    pitch_deck: bytes | None
-    products: list[Product] | str | None
-    projects: list[Project] | str | None
+    payment_verified_at: str | None
+    pitch_deck: bytes
+    products: list
+    projects: list
     sector: Sector | str
-    website: str | None
+    website: str
     workspace: dict
     year_founded: str | None
     created_at: str

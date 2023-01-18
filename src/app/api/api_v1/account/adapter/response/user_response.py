@@ -9,8 +9,8 @@ class UserPostResponse(BaseModel):
     phone: str
     email_verified_at: str | None
     phone_verified_at: str | None
-    id_document: str | None
-    id_document_verified_at: str | None
+    ID_document: str
+    ID_document_verified_at: str | None
     is_active: bool
     created_at: str
     updated_at: str

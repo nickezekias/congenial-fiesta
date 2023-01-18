@@ -24,7 +24,7 @@ class BusinessPostRequest(BaseModel):
     org_type: OrgType | str
     sector: Sector | str
     website: str | None
-    workspace: Workspace
+    workspace: dict
     year_founded: str | None
     created_at: str
     updated_at: str

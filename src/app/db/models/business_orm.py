@@ -5,15 +5,15 @@ import uuid
 
 class BusinessORM(Base):
     __tablename__ = "businesses"
-
-    annual_turnover = Column(String, primary_key=True, nullable=True)
+    id = Column(String(36), primary_key=True, index=True)
+    annual_turnover = Column(String, nullable=True)
     business_model = Column(String, nullable=True)
     company_size = Column(String, nullable=False)
     company_type = Column(String, nullable=False)
     description = Column(Text, nullable=False)
     employees = Column(String, nullable=True) #remove nullable true
-    id_document = Column(String, nullable=True)
-    id_document_verified_at = Column(DateTime, nullable=True)
+    ID_document = Column(String, nullable=True)
+    ID_document_verified_at = Column(DateTime, nullable=True)
     industry = Column(String, nullable=False)
     investors = Column(String, nullable=True)
     locations = Column(String, nullable=True)
@@ -42,8 +42,8 @@ class BusinessORM(Base):
             "company_type": self.company_type,
             "description": self.description,
             "employees": self.employees,
-            "id_document": self.id_document,
-            "id_document_verified_at": self.id_document_verified_at,
+            "ID_document": self.ID_document,
+            "ID_document_verified_at": self.ID_document_verified_at,
             "industry": self.industry,
             "investors": self.investors,
             "locations": self.locations,

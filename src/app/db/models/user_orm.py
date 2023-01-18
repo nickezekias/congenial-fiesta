@@ -7,7 +7,7 @@ import uuid
 class UserORM(Base):
     __tablename__ = "users"
 
-    id = Column(String(36), primary_key=True, index=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, index=True)
     avatar = Column(String, nullable=True)
     first_name = Column(String)
     last_name = Column(String)
@@ -17,8 +17,8 @@ class UserORM(Base):
     token = Column(String, unique=True, nullable=False)
     email_verified_at = Column(DateTime, nullable=True)
     phone_verified_at = Column(DateTime, nullable=True)
-    id_document = Column(String, nullable=True)
-    id_document_verified_at = Column(DateTime, nullable=True)
+    ID_document = Column(String, nullable=True)
+    ID_document_verified_at = Column(DateTime, nullable=True)
     is_active = Column(Boolean(), default=True)
     created_at = Column(DateTime)
     updated_at = Column(DateTime)

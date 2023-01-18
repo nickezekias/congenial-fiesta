@@ -42,8 +42,8 @@ async def index():
         token = None,
         email_verified_at = None,
         phone_verified_at = None,
-        id_document = None,
-        id_document_verified_at = None,
+        ID_document = None,
+        ID_document_verified_at = None,
         is_active = True,
         created_at = datetime.strptime("2022-11-11:01:12:22", '%Y-%m-%d:%H:%M:%S'),
         updated_at = datetime.strptime("2022-11-11:00:00:00", '%Y-%m-%d:%H:%M:%S')

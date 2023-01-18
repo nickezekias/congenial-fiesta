@@ -1,5 +1,6 @@
 from src.domain.business.i_business_json_mapper import IBusinessJsonMapper
 from src.domain.business.business import Business
+from src.domain.business.workspace import Workspace
 from src.app.api.api_v1.business.adapter.request.business_request import BusinessPostRequest
 from src.app.api.api_v1.business.adapter.response.business_response import BusinessPostResponse
 
@@ -12,29 +13,29 @@ class BusinessJsonMapper(IBusinessJsonMapper):
         #FIX: make this explicit with say a factory pattern
         return Business(
             id = "",
-            annual_turnover = None,
-            business_model = None,
+            annual_turnover = "",
+            business_model = "",
             company_size = param.company_size,
             company_type = param.company_type,
             description = param.description,
-            employees = None,
-            id_document = None,
-            id_document_verified_at = None,
+            employees = [],
+            ID_document = "",
+            ID_document_verified_at = None,
             industry = param.industry,
-            investors = None,
-            locations = None,
-            markets = None,
+            investors = [],
+            locations = [],
+            markets = [],
             name = param.name,
             org_type = param.org_type,
-            partners = None,
+            partners = [],
             payment = None,
             payment_verified_at = None,
-            pitch_deck = None,
-            products = None,
-            projects = None,
+            pitch_deck = "",
+            products = [],
+            projects = [],
             sector = param.sector,
             website = param.website,
-            workspace = param.workspace,
+            workspace = Workspace(**param.workspace),
             year_founded = param.year_founded,
             created_at = DateTimeUtil.string_to_date(param.created_at),
             updated_at = DateTimeUtil.string_to_date(param.updated_at)
@@ -49,8 +50,8 @@ class BusinessJsonMapper(IBusinessJsonMapper):
             company_type = param.company_type,
             description = param.description,
             employees = param.employees,
-            id_document = param.id_document,
-            id_document_verified_at = param.id_document_verified_at,
+            ID_document = param.ID_document,
+            ID_document_verified_at = param.ID_document_verified_at,
             industry = param.industry,
             investors = param.investors,
             locations = param.locations,
@@ -65,7 +66,7 @@ class BusinessJsonMapper(IBusinessJsonMapper):
             projects = param.projects,
             sector = param.sector,
             website = param.website,
-            workspace = param.workspace,
+            workspace = param.workspace.as_dict(),
             year_founded = param.year_founded,
             created_at = DateTimeUtil.date_to_iso_string(param.created_at),
             updated_at = DateTimeUtil.date_to_iso_string(param.updated_at)

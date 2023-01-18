@@ -14,11 +14,11 @@ class User(Entity):
     email: str
     phone: str
     password: str
-    token: str | None
+    token: str
     email_verified_at: datetime | None
     phone_verified_at: datetime | None
-    id_document: str | None
-    id_document_verified_at: datetime | None
+    ID_document: str
+    ID_document_verified_at: datetime | None
     is_active: bool
     created_at: datetime
     updated_at: datetime
@@ -33,11 +33,11 @@ class User(Entity):
         email: str,
         phone: str,
         password: str,
-        token: str | None,
+        token: str,
         email_verified_at: datetime | None,
         phone_verified_at: datetime | None,
-        id_document: str | None,
-        id_document_verified_at: datetime | None,
+        ID_document: str,
+        ID_document_verified_at: datetime | None,
         is_active: bool,
         created_at: datetime,
         updated_at: datetime
@@ -52,8 +52,8 @@ class User(Entity):
         self.token = token
         self.email_verified_at = email_verified_at
         self.phone_verified_at = phone_verified_at
-        self.id_document = id_document
-        self.id_document_verified_at = id_document_verified_at
+        self.ID_document = ID_document
+        self.ID_document_verified_at = ID_document_verified_at
         self.is_active = is_active
         self.created_at = created_at
         self.updated_at = updated_at

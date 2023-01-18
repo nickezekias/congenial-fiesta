@@ -23,28 +23,28 @@ OrgType = TypeVar('OrgType')
 
 @dataclass
 class Business(Entity):
-    annual_turnover: str | None
-    business_model: bytes | None
+    annual_turnover: str
+    business_model: bytes
     company_size: str | CompanySize
     company_type: str | CompanyType
     description: str
-    employees: list[User] | None
-    id_document: bytes | None
-    id_document_verified_at: datetime | None
+    employees: list[User]
+    ID_document: bytes
+    ID_document_verified_at: datetime | None
     industry: Industry | str
-    investors: list[Business] | None
-    locations: list[BusinessLocation] | None
-    markets: list[BusinessMarket] | None
+    investors: list[Business]
+    locations: list[BusinessLocation]
+    markets: list[BusinessMarket]
     name: str
     org_type: OrgType | str
-    partners: list[Business] | None
-    payment: Payment | str | None
+    partners: list[Business]
+    payment: Payment | str
     payment_verified_at: datetime | None
-    pitch_deck: bytes | None
-    products: list[Product] | str | None
-    projects: list[Project] | str | None
+    pitch_deck: bytes
+    products: list[Product] | str
+    projects: list[Project] | str
     sector: Sector | str
-    website: str | None
+    website: str
     workspace: Workspace
     year_founded: datetime | None
     created_at: datetime
@@ -55,27 +55,27 @@ class Business(Entity):
         self,
         id: str,
         annual_turnover: str,
-        business_model: bytes | None,
+        business_model: bytes,
         company_size: str | CompanySize,
         company_type: str | CompanyType,
         description: str,
-        employees: list[User] | None,
-        id_document: bytes | None,
-        id_document_verified_at: datetime | None,
+        employees: list[User],
+        ID_document: bytes,
+        ID_document_verified_at: datetime | None,
         industry: Industry | str,
-        investors: list[Business] | None,
-        locations: list[BusinessLocation] | None,
-        markets: list[BusinessMarket] | None,
+        investors: list[Business],
+        locations: list[BusinessLocation],
+        markets: list[BusinessMarket],
         name: str,
         org_type: OrgType | str,
-        partners: list[Business] | None,
-        payment: Payment | str | None,
+        partners: list[Business],
+        payment: Payment | str,
         payment_verified_at: datetime | None,
-        pitch_deck: bytes | None,
-        products: list[Product] | str | None,
-        projects: list[Project] | str | None,
+        pitch_deck: bytes,
+        products: list[Product] | str,
+        projects: list[Project] | str,
         sector: Sector | str,
-        website: str | None,
+        website: str,
         workspace: Workspace,
         year_founded: datetime | None,
         created_at: datetime,
@@ -88,8 +88,8 @@ class Business(Entity):
         self.company_type = company_type
         self.description = description
         self.employees = employees
-        self.id_document = id_document
-        self.id_document_verified_at = id_document_verified_at
+        self.ID_document = ID_document
+        self.ID_document_verified_at = ID_document_verified_at
         self.industry = industry
         self.investors = investors
         self.locations = locations
