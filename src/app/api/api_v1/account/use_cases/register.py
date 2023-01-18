@@ -4,13 +4,15 @@ from src.domain.account.i_authenticator import IAuthenticator
 
 from src.domain.account.user import User
 from src.domain.account.i_account_repository import IAccountRepository
+from src.app.api.api_v1.account.adapter.presenter.account_json_mapper import AccountJsonMapper
+from src.app.api.api_v1.account.adapter.request.register_request import RegisterRequest
 
 from src.domain.business.business import Business
 from src.domain.business.i_business_repository import IBusinessRepository
 from src.domain.business.i_business_presenter import IBusinessPresenter
+from src.app.api.api_v1.business.adapter.presenter.business_json_mapper import BusinessJsonMapper
 from src.app.api.api_v1.business.adapter.response.business_response import BusinessPostResponse
 
-from src.app.api.api_v1.business.use_cases.create_business import CreateBusiness as CreateBusinessUseCase
 from src.app.api.api_v1.account.adapter.response.register_response import RegisterResponse
 
 class Register(IUseCase):
@@ -19,6 +21,8 @@ class Register(IUseCase):
     business_repository: IBusinessRepository
     business_presenter: IBusinessPresenter
     authenticator: IAuthenticator
+    account_json_mapper: AccountJsonMapper
+    business_json_mapper: BusinessJsonMapper
 
     def __init__(
             self,
@@ -33,16 +37,31 @@ class Register(IUseCase):
         self.business_repository = business_repository
         self.business_presenter = business_presenter
         self.authenticator = authenticator
+        self.account_json_mapper = AccountJsonMapper()
+        self.business_json_mapper = BusinessJsonMapper()
 
-    async def execute(self, user: User, business: Business) -> RegisterResponse | None:
-        found_user: User = self.account_repository.get_by_email(email = user.email)
+    async def execute(self, form_data: RegisterRequest) -> RegisterResponse | None:
+        # create user entity from form data
+        user_req = form_data.user
+        user_req.password = self.authenticator.get_password_hash(user_req.password) # hash user request password
+        user_input = self.account_json_mapper.mapToDomain(user_req)
+
+        # create business entity from form_data
+        business_req = form_data.business
+        business_input = self.business_json_mapper.mapToDomain(business_req)
+
+        # check no user with same email exists
+        found_user: User = self.account_repository.get_by_email(email = user_input.email)
         if found_user:
             self.register_presenter.output_error_email_exists()
-        new_user = self.account_repository.add(entity=user, NO_COMMIT=True)
-        business_res: BusinessPostResponse = await CreateBusinessUseCase(
-            self.business_repository,
-            self.business_presenter
-        ).execute(business)
+
+        # add user to DB
+        user = self.account_repository.add(entity=user_input)
+
+        # add business to db and get presented data
+        business = self.business_repository.add(entity=business_input)
+
         # []FIXME: use unit-of-work to commit application transactions
-        self.business_repository.commit()
-        return self.register_presenter.output(new_user, business_res)
+        # commit transaction to db
+        self.account_repository.commit()
+        return self.register_presenter.output(user, business)

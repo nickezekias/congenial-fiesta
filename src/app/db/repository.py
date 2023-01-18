@@ -29,11 +29,8 @@ class Repository(IRepository[TEntity]):
         entities = self.mapper.mapToDomainList(orms)
         return entities
 
-    def add(self, entity: TEntity, NO_COMMIT=False) -> TEntity:
+    def add(self, entity: TEntity) -> TEntity:
         orm = self.mapper.mapFromDomain(entity)
-        if not NO_COMMIT:
-            self.db.commit()
-            self.db.refresh(orm)
         self.db.add(orm)
         user = self.mapper.mapToDomain(orm)
         return user
