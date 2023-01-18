@@ -1,0 +1,22 @@
+version: "3"
+services:
+  cd_backend:
+    container_name: cd-backend
+    build:
+      dockerfile: ./src/app/api/api_v1/Dockerfile
+      context: .
+    environment:
+      - APP_HOST=0.0.0.0
+    restart: on-failure
+    ports:
+      - 8000:8000
+    volumes:
+      - .:/usr/src/app
+
+  cd-backend-db:
+    container_name: cd-backend-db
+    image: mariadb:latest
+    ports:
+        - "32001:3306"
+    environment:
+        MARIADB_ROOT_PASSWORD: root
