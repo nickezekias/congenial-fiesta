@@ -23,7 +23,7 @@ class Settings(BaseSettings):
     API_V1_STR: str = "/api/v1"
     APP_DEBUG: bool = os.getenv("APP_DEBUG", False)
 
-    JWT_SECRET: str = os.getenv("APP_KEY", "randfi8398238xkl48x8")
+    APP_KEY: str = os.getenv("APP_KEY", "randfi8398238xkl48x8")
     ALGORITHM: str = "HS256"
 
     # 60 minutes * 24 hours * 8 days = 8 days

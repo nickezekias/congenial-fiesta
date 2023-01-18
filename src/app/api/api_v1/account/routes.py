@@ -1,19 +1,19 @@
 from fastapi import APIRouter, Depends
-from fastapi.security import OAuth2PasswordRequestForm
+from datetime import timedelta
 
-from src.app.api.api_v1.account.adapter.controller.login_controller import LoginController
-from src.app.api.api_v1.account.adapter.controller.register_controller import RegisterController
-
+from src.app.config.app import Settings
 from src.domain.account.i_account_repository import IAccountRepository
-from src.app.api.api_v1.account.adapter.presenter.register_presenter import RegisterPresenter
-
-
 from src.domain.business.i_business_repository import IBusinessRepository
-
-from src.app.api.api_v1.business.adapter.presenter.business_presenter import BusinessPresenter
+from src.app.api.api_v1.account.adapter.request.login_request import LoginRequest
+from src.app.api.api_v1.account.adapter.response.login_response import LoginResponse
 from src.app.api.api_v1.account.adapter.request.register_request import RegisterRequest
 from src.app.api.api_v1.account.adapter.response.register_response import RegisterResponse
+from src.app.api.api_v1.account.adapter.controller.login_controller import LoginController
+from src.app.api.api_v1.account.adapter.controller.register_controller import RegisterController
+from src.app.api.api_v1.business.adapter.presenter.business_presenter import BusinessPresenter
+from src.app.api.api_v1.account.adapter.presenter.register_presenter import RegisterPresenter
 
+from src.app.api.api_v1.deps import get_settings
 from src.app.api.api_v1.deps import get_account_mariadb_repository
 from src.app.api.api_v1.deps import get_business_mariadb_repository
 from src.app.api.api_v1.deps import get_authenticator
@@ -71,10 +71,16 @@ async def index():
     }
     return RegisterPresenter().output(user, business_res=business)
 
-@router.post("/login", response_model=dict, status_code=200)
-async def login(form_data: OAuth2PasswordRequestForm = Depends(), repository: IAccountRepository = Depends(get_account_mariadb_repository), authenticator=Depends(get_authenticator)) -> dict | None:
+@router.post("/login", response_model=LoginResponse, status_code=200)
+async def login(
+    form_data: LoginRequest,
+    settings: Settings = Depends(get_settings),
+    repository: IAccountRepository = Depends(get_account_mariadb_repository),
+    authenticator=Depends(get_authenticator)
+) -> dict | None:
+    access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     controller = LoginController(repository, authenticator)
-    return await controller.login(form_data)
+    return await controller.login(form_data, access_token_expires)
 
 
 @router.post("/register", response_model=RegisterResponse, status_code=201)

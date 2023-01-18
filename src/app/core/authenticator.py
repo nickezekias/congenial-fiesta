@@ -24,7 +24,7 @@ class Authenticator(IAuthenticator):
             )
         to_encode = {"exp": expire, "sub": str(subject)}
         encoded_jwt = jwt.encode(
-            to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
+            to_encode, settings.APP_KEY, algorithm=settings.ALGORITHM)
         return encoded_jwt
 
     def verify_password(self, plain_password: str, hashed_password: str) -> bool:
