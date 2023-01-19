@@ -1,7 +1,10 @@
 from fastapi import APIRouter, Depends
 from datetime import timedelta
+from datetime import datetime
+
 
 from src.app.config.app import Settings
+from src.domain.account.user import User
 from src.domain.account.i_account_repository import IAccountRepository
 from src.domain.business.i_business_repository import IBusinessRepository
 from src.app.api.api_v1.account.adapter.request.login_request import LoginRequest
@@ -10,17 +13,20 @@ from src.app.api.api_v1.account.adapter.request.register_request import Register
 from src.app.api.api_v1.account.adapter.response.register_response import RegisterResponse
 from src.app.api.api_v1.account.adapter.controller.login_controller import LoginController
 from src.app.api.api_v1.account.adapter.controller.register_controller import RegisterController
+from src.domain.account.i_account_presenter import IAccountPresenter
+from src.app.api.api_v1.account.adapter.presenter.account_presenter import AccountPresenter
 from src.app.api.api_v1.business.adapter.presenter.business_presenter import BusinessPresenter
 from src.app.api.api_v1.account.adapter.presenter.register_presenter import RegisterPresenter
+
+from src.app.api.api_v1.account.adapter.request.verify_email_request import VerifyEmailRequest
+from src.app.api.api_v1.account.use_cases.verify_email import VerifyEmail as VerifyEmailUseCase
 
 from src.app.api.api_v1.deps import get_settings
 from src.app.api.api_v1.deps import get_account_mariadb_repository
 from src.app.api.api_v1.deps import get_business_mariadb_repository
 from src.app.api.api_v1.deps import get_authenticator
 
-from src.domain.account.user import User
-from typing import Any
-from datetime import datetime
+from src.app.util.crypto import Crypto
 
 router = APIRouter(
     tags=["auth"]
@@ -98,3 +104,13 @@ async def register(
         authenticator
     )
     return await controller.register(form_data)
+
+@router.post("/verify-email", response_model=dict, status_code=200)
+async def verify_email(
+    payload: VerifyEmailRequest,
+    account_repository: IAccountRepository = Depends(get_account_mariadb_repository)
+) -> dict | None:
+    presenter: IAccountPresenter = AccountPresenter()
+    return await VerifyEmailUseCase(account_repository, presenter, Crypto).execute(payload)
+
+    

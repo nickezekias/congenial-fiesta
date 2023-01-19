@@ -24,13 +24,15 @@ class Settings(BaseSettings):
     APP_DEBUG: bool = os.getenv("APP_DEBUG", False)
 
     APP_KEY: str = os.getenv("APP_KEY", "randfi8398238xkl48x8")
-    ALGORITHM: str = "HS256"
+    CRYPT_ALGORITHM: str = "HS256"
 
     # 60 minutes * 24 hours * 8 days = 8 days
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8
 
     #email
     EMAIL_TEMPLATES_DIR="src/app/email/templates"
+    MAIL_VERIFY_TOKEN_EXPIRE_HOURS: int = 1
+    MAIL_PASSWORD_RESET_TOKEN_EXPIRE_HOURS: int = 48
     MAIL_USERNAME = os.getenv("MAIL_USERNAME", "")
     MAIL_PASSWORD = os.getenv("MAIL_PASSWORD", "")
     MAIL_FROM_NAME = os.getenv("APP_NAME")
