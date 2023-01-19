@@ -11,10 +11,8 @@ from src.domain.business.business import Business
 from src.domain.business.i_business_repository import IBusinessRepository
 from src.domain.business.i_business_presenter import IBusinessPresenter
 from src.app.api.api_v1.business.adapter.presenter.business_json_mapper import BusinessJsonMapper
-from src.app.api.api_v1.business.adapter.response.business_response import BusinessPostResponse
 
 from src.app.api.api_v1.account.adapter.response.register_response import RegisterResponse
-
 class Register(IUseCase):
     account_repository: IAccountRepository
     register_presenter: IRegisterPresenter
@@ -56,10 +54,10 @@ class Register(IUseCase):
             self.register_presenter.output_error_email_exists()
 
         # add user to DB
-        user = self.account_repository.add(entity=user_input)
+        user: User = self.account_repository.add(entity=user_input)
 
         # add business to db and get presented data
-        business = self.business_repository.add(entity=business_input)
+        business: Business = self.business_repository.add(entity=business_input)
 
         # []FIXME: use unit-of-work to commit application transactions
         # commit transaction to db
