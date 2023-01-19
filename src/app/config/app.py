@@ -29,6 +29,15 @@ class Settings(BaseSettings):
     # 60 minutes * 24 hours * 8 days = 8 days
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8
 
+    #email
+    EMAIL_TEMPLATES_DIR="src/app/email/templates"
+    MAIL_USERNAME = os.getenv("MAIL_USERNAME", "")
+    MAIL_PASSWORD = os.getenv("MAIL_PASSWORD", "")
+    MAIL_FROM_NAME = os.getenv("APP_NAME")
+    MAIL_FROM_ADDRESS = os.getenv("MAIL_FROM_ADDRESS", "admin@noenv.com")
+    MAIL_PORT = os.getenv("MAIL_PORT", "")
+    MAIL_HOST = os.getenv("MAIL_HOST", "")
+
     # logging
     logging: LoggingSettings = LoggingSettings()
 
