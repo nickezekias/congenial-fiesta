@@ -22,7 +22,7 @@ class VerifyEmail(IUseCase):
         self.crypto = crypto
 
     async def execute(self, payload: VerifyEmailRequest) -> dict:
-        user = self.repository.get_by_email(payload.email)
+        user: User = self.repository.get_by_email(payload.email)
         if not user:
             self.presenter.output_error_login_to_verify_email()
 
