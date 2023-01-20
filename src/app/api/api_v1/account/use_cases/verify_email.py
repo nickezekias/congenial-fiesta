@@ -31,7 +31,7 @@ class VerifyEmail(IUseCase):
             self.presenter.output_error_invalid_email_verification_link()
 
         if email_from_token == payload.email:
-            self.presenter.output_verify_email()
+            return self.presenter.output_verify_email()
         else:
             self.presenter.output_error_invalid_email_verification_link()
         

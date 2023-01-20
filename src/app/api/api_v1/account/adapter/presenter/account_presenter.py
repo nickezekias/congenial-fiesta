@@ -4,7 +4,15 @@ from src.domain.account.i_account_presenter import IAccountPresenter
 
 class AccountPresenter(IAccountPresenter):
 
+    def output_error_user_not_found(self) -> None:
+        raise HTTPException(
+            status_code = 404,
+            detail = "account.shared.errors.userNotFound"
+        )
 
+
+
+    # verify email
     def output_verify_email(self) -> dict:
         return {
             "success": True,
@@ -22,3 +30,11 @@ class AccountPresenter(IAccountPresenter):
             status_code=400,
             detail="account.verifyEmail.invalidVerificationLink"
         )
+
+
+    # forgot password
+    def output_forgot_password(self) -> dict:
+        return {
+            "success": True,
+            "message": "account.forgotPassword.success"
+        }

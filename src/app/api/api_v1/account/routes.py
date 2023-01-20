@@ -1,9 +1,10 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Form, Depends
 from datetime import timedelta
 from datetime import datetime
+from pydantic import EmailStr
 
-
-from src.app.config.app import Settings
+from src.app.config.app import settings as app_settings
+from src.app.api.api_v1.config.app import Settings
 from src.domain.account.user import User
 from src.domain.account.i_account_repository import IAccountRepository
 from src.domain.business.i_business_repository import IBusinessRepository
@@ -20,6 +21,10 @@ from src.app.api.api_v1.account.adapter.presenter.register_presenter import Regi
 
 from src.app.api.api_v1.account.adapter.request.verify_email_request import VerifyEmailRequest
 from src.app.api.api_v1.account.use_cases.verify_email import VerifyEmail as VerifyEmailUseCase
+
+from src.domain.notification.i_notification import INotification
+from src.app.api.api_v1.account.adapter.notification.forgot_password_notification import ForgotPasswordNotification
+from src.app.api.api_v1.account.use_cases.forgot_password import ForgotPassword as ForgotPasswordUseCase
 
 from src.app.api.api_v1.deps import get_settings
 from src.app.api.api_v1.deps import get_account_mariadb_repository
@@ -112,5 +117,14 @@ async def verify_email(
 ) -> dict | None:
     presenter: IAccountPresenter = AccountPresenter()
     return await VerifyEmailUseCase(account_repository, presenter, Crypto).execute(payload)
+
+@router.post("/forgot-password", response_model=dict, status_code=200)
+async def forgot_password(
+    email: EmailStr = Form(),
+    account_repository: IAccountRepository = Depends(get_account_mariadb_repository),
+) -> dict | None:
+    notification: INotification = ForgotPasswordNotification()
+    presenter: IAccountPresenter = AccountPresenter()
+    return await ForgotPasswordUseCase(account_repository, presenter, Crypto, notification).execute(email)
 
     

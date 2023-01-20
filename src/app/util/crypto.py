@@ -6,6 +6,9 @@ from src.domain.util.i_crypto import ICrypto
 from src.app.config.app import settings;
 
 class Crypto(ICrypto):
+    EXPIRES_TYPE_SECONDS = "seconds"
+    EXPIRES_TYPE_MINUTES = "minutes"
+    EXPIRES_TYPE_HOURS = "hours"
 
     @staticmethod
     def generate_token(subject: str, expires_type: str, expires_duration: timedelta) -> str:
