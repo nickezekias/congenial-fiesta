@@ -22,7 +22,7 @@ from src.app.api.api_v1.account.adapter.presenter.register_presenter import Regi
 from src.app.api.api_v1.account.adapter.request.verify_email_request import VerifyEmailRequest
 from src.app.api.api_v1.account.use_cases.verify_email import VerifyEmail as VerifyEmailUseCase
 
-from src.domain.notification.i_notification import INotification
+from src.domain.notification.notification import Notification
 from src.app.api.api_v1.account.adapter.notification.forgot_password_notification import ForgotPasswordNotification
 from src.app.api.api_v1.account.use_cases.forgot_password import ForgotPassword as ForgotPasswordUseCase
 
@@ -123,7 +123,7 @@ async def forgot_password(
     email: EmailStr = Form(),
     account_repository: IAccountRepository = Depends(get_account_mariadb_repository),
 ) -> dict | None:
-    notification: INotification = ForgotPasswordNotification()
+    notification: Notification = ForgotPasswordNotification()
     presenter: IAccountPresenter = AccountPresenter()
     return await ForgotPasswordUseCase(account_repository, presenter, Crypto, notification).execute(email)
 

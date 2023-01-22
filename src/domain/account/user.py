@@ -68,3 +68,7 @@ class User(Entity):
 
     def check_verification_status() -> bool:
         pass
+
+    def full_name(self, locale: str = 'en') -> str:
+        if locale == 'en':
+            return f'{self.first_name} {self.last_name}'

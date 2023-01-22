@@ -2,7 +2,7 @@ from src.domain.base.i_use_case import IUseCase
 from src.domain.account.i_account_presenter import IAccountPresenter
 from src.domain.account.i_account_repository import IAccountRepository
 from src.domain.util.i_crypto import ICrypto
-from src.domain.notification.i_notification import INotification
+from src.domain.notification.notification import Notification
 
 from src.domain.account.user import User
 
@@ -10,14 +10,14 @@ class ForgotPassword(IUseCase):
     repository: IAccountRepository
     presenter: IAccountPresenter
     crypto: ICrypto
-    notification: INotification
+    notification: Notification
 
     def __init__(
             self,
             repository: IAccountRepository,
             presenter: IAccountPresenter,
             crypto: ICrypto,
-            notification: INotification
+            notification: Notification
         ) -> None:
         self.repository = repository
         self.presenter = presenter
@@ -34,5 +34,9 @@ class ForgotPassword(IUseCase):
             expires_type="minutes",
             expires_duration=60
         )
-        self.notification.send(token)
+        # init and send  notification
+        self.notification.notifiable = user
+        self.notification.token = token
+        await self.notification.send()
+
         return self.presenter.output_forgot_password()
