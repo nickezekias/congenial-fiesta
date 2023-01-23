@@ -1,10 +1,12 @@
+
 from abc import ABC, abstractmethod
 from typing import Generic, TypeVar
 
 TEntity = TypeVar('TEntity')
+ORMEntity = TypeVar('ORMEntity')
 TQuery = TypeVar('TQuery')
 
-class IRepository(ABC, Generic[TEntity]):
+class IRepository(ABC, Generic[ORMEntity, TEntity]):
     @abstractmethod
     def get(self,id: int) -> TEntity:
         pass
@@ -18,11 +20,15 @@ class IRepository(ABC, Generic[TEntity]):
         pass
 
     @abstractmethod
-    def add(self,entity: TEntity, NO_COMMIT=False) -> TEntity:
+    def add(self,entity: TEntity) -> TEntity:
         pass
 
     @abstractmethod
     def add_range(self, entities: list[TEntity], NO_COMMIT=False) -> list[TEntity]:
+        pass
+
+    @abstractmethod
+    def update(self, entity: TEntity) -> None:
         pass
 
     @abstractmethod

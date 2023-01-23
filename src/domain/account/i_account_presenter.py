@@ -29,3 +29,12 @@ class IAccountPresenter(ABC):
     @abstractmethod
     def output_forgot_password(self) -> None:
         pass
+
+    # reset password
+    @abstractmethod
+    def output_error_invalid_token(self) -> None:
+        pass
+
+    @abstractmethod
+    def output_reset_password(self) -> dict:
+        pass

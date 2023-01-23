@@ -38,3 +38,16 @@ class AccountPresenter(IAccountPresenter):
             "success": True,
             "message": "account.forgotPassword.success"
         }
+
+    # reset password
+    def output_error_invalid_token(self) -> dict:
+        raise HTTPException(
+            status_code=400,
+            detail="account.resetPassword.error.invalidToken"
+        )
+
+    def output_reset_password(self) -> dict:
+        return {
+            "success": True,
+            "message": "account.resetPassword.success"
+        }

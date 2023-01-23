@@ -26,7 +26,7 @@ class VerifyEmail(IUseCase):
         if not user:
             self.presenter.output_error_login_to_verify_email()
 
-        email_from_token = self.crypto.verify_token(payload.token, subject="email")
+        email_from_token = self.crypto.verify_token(payload.token)
         if not email_from_token:
             self.presenter.output_error_invalid_email_verification_link()
 

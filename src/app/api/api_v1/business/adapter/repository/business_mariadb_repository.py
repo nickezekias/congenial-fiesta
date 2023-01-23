@@ -8,7 +8,7 @@ from src.app.api.api_v1.business.adapter.repository.business_mariadb_mapper impo
 from src.domain.business.business import Business
 from src.app.db.models.business_orm import BusinessORM
 
-class BusinessMariaDbRepository(Repository[Business], IBusinessRepository):
+class BusinessMariaDbRepository(Repository[BusinessORM, Business], IBusinessRepository):
     db: Session
     mapper: BusinessMariaDbMapper
 
@@ -18,4 +18,7 @@ class BusinessMariaDbRepository(Repository[Business], IBusinessRepository):
         self.mapper = mapper
 
     def find_locations(self):
+        pass
+
+    def update(self, business: Business) -> Business:
         pass
