@@ -1,13 +1,15 @@
-from typing import TypeVar
+from typing import Generic, TypeVar
 from src.domain.base.i_repository import IRepository
 from src.domain.base.mapper import Mapper
+from src.app.db.models.user_orm import UserORM
+from src.app.db.base_class import Base as BaseORM
 
 TEntity = TypeVar('TEntity')
 ORMEntity = TypeVar('ORMEntity')
 DbContext = TypeVar('DbContext')
 TQuery = TypeVar('TQuery')
 
-class Repository(IRepository[TEntity]):
+class Repository(Generic[ORMEntity, TEntity], IRepository[ORMEntity, TEntity]):
     db: DbContext
     mapper: Mapper
 
@@ -15,9 +17,8 @@ class Repository(IRepository[TEntity]):
         self.db = db
         self.mapper = mapper
 
-    def get(self, id: int) -> TEntity:
-        orm: ORMEntity =  self.db.query.get(id)
-        return self.mapper.mapToDomain(orm)
+    def get(self, id: int | str) -> TEntity:
+        pass
 
     def getAll(self) -> list[TEntity]:
         orms: list[ORMEntity] = self.db.query.all()
@@ -34,6 +35,10 @@ class Repository(IRepository[TEntity]):
         self.db.add(orm)
         user = self.mapper.mapToDomain(orm)
         return user
+
+    def update(self, entity: TEntity) -> TEntity:
+        pass
+
 
 
     #TODO: Return refreshed entities instead of input entities

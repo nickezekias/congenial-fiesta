@@ -1,7 +1,6 @@
-from sqlalchemy import Boolean, Column, DateTime, Integer, String
+from sqlalchemy import Boolean, Column, DateTime, String
 
 from src.app.db.base_class import Base
-import uuid
 
 
 class UserORM(Base):

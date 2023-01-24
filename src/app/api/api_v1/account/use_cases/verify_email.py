@@ -22,16 +22,16 @@ class VerifyEmail(IUseCase):
         self.crypto = crypto
 
     async def execute(self, payload: VerifyEmailRequest) -> dict:
-        user = self.repository.get_by_email(payload.email)
+        user: User = self.repository.get_by_email(payload.email)
         if not user:
             self.presenter.output_error_login_to_verify_email()
 
-        email_from_token = self.crypto.verify_token(payload.token, subject="email")
+        email_from_token = self.crypto.verify_token(payload.token)
         if not email_from_token:
             self.presenter.output_error_invalid_email_verification_link()
 
         if email_from_token == payload.email:
-            self.presenter.output_verify_email()
+            return self.presenter.output_verify_email()
         else:
             self.presenter.output_error_invalid_email_verification_link()
         

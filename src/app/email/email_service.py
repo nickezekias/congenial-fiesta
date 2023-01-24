@@ -3,7 +3,6 @@ from pydantic import EmailStr, BaseModel
 from jinja2 import Environment, select_autoescape, PackageLoader
 
 from src.app.config.app import settings
-from src.domain.account.user import User
 
 env = Environment(
     loader=PackageLoader('src.app.email', 'templates'),
@@ -11,14 +10,11 @@ env = Environment(
 )
 
 class EmailService:
-    def __init__(self, user: User, url: str, email: list[EmailStr]):
-        self.name = f"{user.last_name} {user.first_name}"
-        self.sender = 'Codevo <cd-admin@connecting-dots.com>'
-        self.email = email
-        self.url = url
-        pass
+    recipients: list[EmailStr]
+    def __init__(self, recipients: list[EmailStr]):
+        self.recipients = recipients
 
-    async def sendMail(self, subject, template):
+    async def sendMail(self, subject: str, template, template_data: dict):
         conf = ConnectionConfig(
             MAIL_USERNAME=settings.MAIL_USERNAME,
             MAIL_PASSWORD=settings.MAIL_PASSWORD,
@@ -35,15 +31,14 @@ class EmailService:
         template = env.get_template(f'{template}.html')
 
         html = template.render(
-            url=self.url,
-            first_name=self.name,
-            subject=subject
+            subject=subject,
+            **template_data
         )
 
         # Define the message options
         message = MessageSchema(
             subject=subject,
-            recipients=self.email,
+            recipients=self.recipients,
             body=html,
             subtype="html"
         )
@@ -52,5 +47,9 @@ class EmailService:
         fm = FastMail(conf)
         await fm.send_message(message)
 
-    async def sendVerificationCode(self):
-        await self.sendMail('Your verification code (Valid for 10min)', 'verification')
+    async def sendVerificationCode(self, template_data: dict):
+        await self.sendMail(
+            'Your verification code (Valid for 10min)',
+            'verification',
+            template_data
+        )

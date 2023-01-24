@@ -1,9 +1,11 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Form, Depends
 from datetime import timedelta
 from datetime import datetime
+from pydantic import EmailStr
 
-
-from src.app.config.app import Settings
+from typing import Any
+from src.app.config.app import settings as app_settings
+from src.app.api.api_v1.config.app import Settings
 from src.domain.account.user import User
 from src.domain.account.i_account_repository import IAccountRepository
 from src.domain.business.i_business_repository import IBusinessRepository
@@ -21,6 +23,12 @@ from src.app.api.api_v1.account.adapter.presenter.register_presenter import Regi
 from src.app.api.api_v1.account.adapter.request.verify_email_request import VerifyEmailRequest
 from src.app.api.api_v1.account.use_cases.verify_email import VerifyEmail as VerifyEmailUseCase
 
+from src.domain.notification.notification import Notification
+from src.app.api.api_v1.account.adapter.notification.forgot_password_notification import ForgotPasswordNotification
+from src.app.api.api_v1.account.use_cases.forgot_password import ForgotPassword as ForgotPasswordUseCase
+
+from src.app.api.api_v1.account.use_cases.reset_password import ResetPassword as ResetPasswordUseCase
+
 from src.app.api.api_v1.deps import get_settings
 from src.app.api.api_v1.deps import get_account_mariadb_repository
 from src.app.api.api_v1.deps import get_business_mariadb_repository
@@ -31,6 +39,17 @@ from src.app.util.crypto import Crypto
 router = APIRouter(
     tags=["auth"]
 )
+
+@router.post("/test", response_model=Any)
+def test():
+    token = Crypto.generate_token("nickezekias@gmail.com", "minutes", 60)
+
+    manual_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjM3Njc0NDc5MzY2LjczNDgyLCJuYmYiOjE2NzQ0ODI5NjYsInN1YiI6Im5pY2tlemVraWFzQGdtYWlsLmNvbSJ9.-DsuVbgqmIpkLc0bc0S1HzKiqs_6AgXuQ7B6QVMBKrk"
+
+    res = Crypto.verify_token(token)
+
+    return { "manual_token": manual_token, "token": token, "res": res }
+
 
 
 @router.get("/", response_model=RegisterResponse, status_code=200)
@@ -94,8 +113,8 @@ async def register(
     form_data: RegisterRequest,
     account_repository: IAccountRepository = Depends(get_account_mariadb_repository),
     business_repository: IBusinessRepository = Depends(get_business_mariadb_repository),
-    authenticator=Depends(get_authenticator
-)) -> RegisterResponse | None:
+    authenticator=Depends(get_authenticator)
+) -> RegisterResponse | None:
     controller = RegisterController(
         account_repository,
         RegisterPresenter(),
@@ -112,5 +131,29 @@ async def verify_email(
 ) -> dict | None:
     presenter: IAccountPresenter = AccountPresenter()
     return await VerifyEmailUseCase(account_repository, presenter, Crypto).execute(payload)
+
+@router.post("/forgot-password", response_model=dict, status_code=200)
+async def forgot_password(
+    email: EmailStr = Form(),
+    account_repository: IAccountRepository = Depends(get_account_mariadb_repository),
+) -> dict | None:
+    notification: Notification = ForgotPasswordNotification()
+    presenter: IAccountPresenter = AccountPresenter()
+    return await ForgotPasswordUseCase(account_repository, presenter, Crypto, notification).execute(email)
+
+@router.post("/reset-password", response_model=dict, status_code=200)
+async def reset_password(
+    payload: ResetPasswordUseCase.Request,
+    repository: IAccountRepository = Depends(get_account_mariadb_repository),
+    authenticator = Depends(get_authenticator)
+) -> dict:
+    presenter: IAccountPresenter = AccountPresenter()
+    return await ResetPasswordUseCase(
+        repository=repository,
+        presenter=presenter,
+        crypto=Crypto,
+        authenticator=authenticator
+    ).execute(payload)
+
 
     
