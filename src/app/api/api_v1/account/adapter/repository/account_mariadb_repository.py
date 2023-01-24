@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-
+from datetime import datetime
 from src.app.db.repository import Repository
 from src.domain.account.i_account_repository import IAccountRepository
 from src.app.api.api_v1.account.adapter.repository.account_mariadb_mapper import AccountMariaDbMapper
@@ -27,6 +27,7 @@ class AccountMariaDbRepository(Repository[UserORM, User], IAccountRepository):
         return None
 
     def update(self, user: User) -> User:
+        user.updated_at = datetime.now()
         user_query = self.db.query(UserORM).filter_by(id=user.id)
         user_query.update(user.as_dict())
         return self.get(user.id)

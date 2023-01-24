@@ -46,6 +46,12 @@ class AccountPresenter(IAccountPresenter):
             detail="account.resetPassword.error.invalidToken"
         )
 
+    def output_error_passwords_not_same(self) -> None:
+        raise HTTPException(
+            status_code=422,
+            detail="account.resetPassword.error.passwordsNotSame"
+        )
+
     def output_reset_password(self) -> dict:
         return {
             "success": True,

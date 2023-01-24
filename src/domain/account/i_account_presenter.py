@@ -36,5 +36,9 @@ class IAccountPresenter(ABC):
         pass
 
     @abstractmethod
+    def output_error_passwords_not_same(self) -> None:
+        pass
+
+    @abstractmethod
     def output_reset_password(self) -> dict:
         pass

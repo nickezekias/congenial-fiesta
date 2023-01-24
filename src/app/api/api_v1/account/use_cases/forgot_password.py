@@ -31,8 +31,8 @@ class ForgotPassword(IUseCase):
 
         token = self.crypto.generate_token(
             subject=user.email,
-            expires_type="minutes",
-            expires_duration=60
+            expires_type="hours",
+            expires_duration=2
         )
         # init and send  notification
         self.notification.notifiable = user

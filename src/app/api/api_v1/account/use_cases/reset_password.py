@@ -37,7 +37,10 @@ class ResetPassword(IUseCase):
         message: str
 
     async def execute(self, payload: Request) -> Response:
-        # return { "success": True, "message": payload.token }
+        
+        if not payload.password == payload.password_confirmation:
+            self.presenter.output_error_passwords_not_same()
+
         email = self.crypto.verify_token(payload.token)
         # return { "success": True, "message": email }
         if not email:
@@ -49,8 +52,6 @@ class ResetPassword(IUseCase):
 
         password = self.authenticator.get_password_hash(payload.password)
         user.password = password
-        user.first_name = "Nick"
-        user.last_name = "Arts"
         self.repository.update(user)
         self.repository.commit()
         return self.presenter.output_reset_password()
