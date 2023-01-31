@@ -7,6 +7,7 @@ from src.app.api.api_v1 import deps
 
 #routers
 from src.app.api.api_v1.account.routes import router as account_routes
+from src.app.api.api_v1.ext_api.routes import router as ext_api_routes
 
 app = FastAPI(
     title=settings.APP_NAME,
@@ -14,6 +15,7 @@ app = FastAPI(
 )
 
 app.include_router(account_routes)
+app.include_router(ext_api_routes)
 
 @app.get("/")
 async def root(db: Session = Depends(deps.get_db)):
