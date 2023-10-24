@@ -1,4 +1,6 @@
 from fastapi import FastAPI, Depends
+from fastapi.middleware.cors import CORSMiddleware
+
 from sqlalchemy.orm import Session
 
 from src.app.config.app import settings
@@ -14,8 +16,16 @@ app = FastAPI(
     openapi_url=f"{settings.API_V1_STR}/openapi.json"
 )
 
-app.include_router(account_routes)
-app.include_router(ext_api_routes)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.BACKEND_CORS_ORIGINS,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+app.include_router(account_routes, prefix="/api/v1")
+app.include_router(ext_api_routes, prefix="/api/v1")
 
 @app.get("/")
 async def root(db: Session = Depends(deps.get_db)):

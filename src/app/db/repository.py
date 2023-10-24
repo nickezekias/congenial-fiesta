@@ -1,8 +1,9 @@
 from typing import Generic, TypeVar
 from src.domain.base.i_repository import IRepository
 from src.domain.base.mapper import Mapper
-from src.app.db.models.user_orm import UserORM
-from src.app.db.base_class import Base as BaseORM
+
+import sqlalchemy
+from loguru import logger
 
 TEntity = TypeVar('TEntity')
 ORMEntity = TypeVar('ORMEntity')
@@ -30,11 +31,11 @@ class Repository(Generic[ORMEntity, TEntity], IRepository[ORMEntity, TEntity]):
         entities = self.mapper.mapToDomainList(orms)
         return entities
 
-    def add(self, entity: TEntity) -> TEntity:
+    def add(self, entity: TEntity) -> None:
         orm = self.mapper.mapFromDomain(entity)
         self.db.add(orm)
-        user = self.mapper.mapToDomain(orm)
-        return user
+        # user = self.mapper.mapToDomain(orm)
+        # return user
 
     def update(self, entity: TEntity) -> TEntity:
         pass
@@ -55,7 +56,12 @@ class Repository(Generic[ORMEntity, TEntity], IRepository[ORMEntity, TEntity]):
         return super().remove_range()
 
     def commit(self) -> None:
-        self.db.commit()
+        try:
+            self.db.commit()
+        except sqlalchemy.exc.SQLAlchemyError as e:
+            error = str(e.__dict__['orig'])
+            logger.error(error)
+            raise Exception("Incorrectly Formatted Data")
 
     def refresh(self, entity: TEntity) -> None:
         self.db.refresh(entity)

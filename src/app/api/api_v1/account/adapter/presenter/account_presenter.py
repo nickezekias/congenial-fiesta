@@ -43,13 +43,13 @@ class AccountPresenter(IAccountPresenter):
     def output_error_invalid_token(self) -> dict:
         raise HTTPException(
             status_code=400,
-            detail="account.resetPassword.error.invalidToken"
+            detail="account.resetPassword.errors.invalidToken"
         )
 
     def output_error_passwords_not_same(self) -> None:
         raise HTTPException(
             status_code=422,
-            detail="account.resetPassword.error.passwordsNotSame"
+            detail="account.resetPassword.errors.passwordsNotSame"
         )
 
     def output_reset_password(self) -> dict:

@@ -46,10 +46,3 @@ class EmailService:
         # Send the email
         fm = FastMail(conf)
         await fm.send_message(message)
-
-    async def sendVerificationCode(self, template_data: dict):
-        await self.sendMail(
-            'Your verification code (Valid for 10min)',
-            'verification',
-            template_data
-        )

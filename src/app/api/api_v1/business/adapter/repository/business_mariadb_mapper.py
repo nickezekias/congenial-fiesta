@@ -1,12 +1,9 @@
-from dataclasses import asdict
-
 from src.domain.base.mapper import Mapper
 from src.domain.business.business import Business
 from src.domain.business.workspace import Workspace
 from src.app.db.models.business_orm import BusinessORM
 
 from src.app.util.date_time_util import DateTimeUtil
-
 class BusinessMariaDbMapper(Mapper[BusinessORM, Business]):
     def mapToDomain(self, param: BusinessORM) -> Business:
         return Business(
@@ -35,8 +32,8 @@ class BusinessMariaDbMapper(Mapper[BusinessORM, Business]):
             website = param.website,
             workspace = Workspace(**param.workspace),
             year_founded = param.year_founded,
-            created_at = DateTimeUtil.string_to_date(param.created_at),
-            updated_at = DateTimeUtil.string_to_date(param.updated_at)
+            created_at = param.created_at,
+            updated_at = param.updated_at
         )
 
     def mapToDomainList(self, params: list[BusinessORM]) -> list[Business]:
@@ -72,8 +69,8 @@ class BusinessMariaDbMapper(Mapper[BusinessORM, Business]):
             website = param.website,
             workspace = param.workspace.as_dict(),
             year_founded = param.year_founded,
-            created_at = DateTimeUtil.date_to_iso_string(param.created_at),
-            updated_at = DateTimeUtil.date_to_iso_string(param.updated_at)
+            created_at = DateTimeUtil.date_to_string(param.created_at),
+            updated_at = DateTimeUtil.date_to_string(param.updated_at)
         )
 
     def mapFromDomainList(self, params: list[Business]) -> list[BusinessORM]:

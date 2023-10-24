@@ -21,7 +21,13 @@ class AccountMariaDbRepository(Repository[UserORM, User], IAccountRepository):
         return self.mapper.mapToDomain(orm)
 
     def get_by_email(self, email: str) -> User | None:
-        orm = self.db.query(UserORM).filter(UserORM.email == email).first()
+        orm = self.db.query(UserORM).filter(UserORM.email == email).one_or_none()
+        if orm:
+            return self.mapper.mapToDomain(orm)
+        return None
+    
+    def get_by_phone(self, phone: str) -> User | None:
+        orm = self.db.query(UserORM).filter(UserORM.phone == phone).one_or_none()
         if orm:
             return self.mapper.mapToDomain(orm)
         return None

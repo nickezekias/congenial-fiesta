@@ -9,6 +9,10 @@ class IAccountRepository(IRepository[UserORM, User]):
     def get_by_email(self, email: str) -> User | None:
         pass
 
+    @abstractmethod
+    def get_by_phone(self, phone: str) -> User | None:
+        pass
+
     # def isAuthenticated
     
     # def getCurrentUser

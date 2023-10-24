@@ -3,7 +3,7 @@ from src.domain.notification.notification import Notification
 from src.domain.account.user import User
 from src.app.email.email_service import EmailService
 
-class ForgotPasswordNotification(Notification[User]):
+class VerifyEmailNotification(Notification[User]):
     _token: str
 
     @property
@@ -20,7 +20,7 @@ class ForgotPasswordNotification(Notification[User]):
 
     async def to_mail(self):
         # []FIXME: Use frontend route
-        url = f"/test-reset-password?token={self.token}"
+        url = f"/api/v1/verify-email?token={self.token}"
         await EmailService([self.notifiable.email]).sendMail(
             'Your verification code (Valid for 1 hour)',
             'verification',

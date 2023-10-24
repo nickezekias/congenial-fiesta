@@ -10,8 +10,8 @@ Currency = TypeVar("Currency")
 class Workspace(Entity):
     currency: Currency
     timezone: str
-    time_format: str
-    date_format: str
+    # time_format: str
+    # date_format: str
     id: str
 
     def __init__(
@@ -19,12 +19,12 @@ class Workspace(Entity):
         id: str,
         currency: Currency,
         timezone: str,
-        time_format: str,
-        date_format: str
+        # time_format: str,
+        # date_format: str
     ) -> None:
         self.id = id
         self.currency = currency
         self.timezone = timezone
-        self.time_format = time_format
-        self.date_format = date_format
+        # self.time_format = time_format
+        # self.date_format = date_format
         super().__init__()

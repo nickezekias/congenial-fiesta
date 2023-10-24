@@ -10,5 +10,5 @@ class LoginPresenter(ILoginPresenter):
     def output_error_user_not_found(self) -> None:
         raise HTTPException(
             status_code = 404,
-            detail = "account.login.error.userNotFound"
+            detail = "account.login.errors.userNotFound"
         )

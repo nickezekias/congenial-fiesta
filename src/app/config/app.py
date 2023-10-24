@@ -50,10 +50,12 @@ class Settings(BaseSettings):
     # BACKEND_CORS_ORIGINS is a comma-separated list of origins
     # e.g: http://localhost,http://localhost:4200,http://localhost:3000
     BACKEND_CORS_ORIGINS: list[AnyHttpUrl] = [
+        "http://localhost:8000",
+        "https://localhost:8000",
         "http://localhost:8080",  # type: ignore
-        # "http://localhost:8000",  # type: ignore
+        "http://localhost:5173",  # type: ignore
         "https://localhost:8080",  # type: ignore
-        # "https://localhost:8000",  # type: ignore
+        "https://localhost:5173",  # type: ignore
     ]
 
     class Config:

@@ -20,7 +20,7 @@ class IRepository(ABC, Generic[ORMEntity, TEntity]):
         pass
 
     @abstractmethod
-    def add(self,entity: TEntity) -> TEntity:
+    def add(self,entity: TEntity) -> None:
         pass
 
     @abstractmethod

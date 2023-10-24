@@ -18,8 +18,26 @@ class RegisterPresenter(IRegisterPresenter):
             "business": business_res
         }
 
-    def output_error_email_exists(self) -> None:
+    def output_errors_email_exists(self) -> None:
         raise HTTPException(
             status_code=400,
-            detail="account.register.error.emailExists"
+            detail="account.register.errors.emailExists"
+        )
+    
+    def output_errors_phone_exists(self) -> None:
+        raise HTTPException(
+            status_code=400,
+            detail="account.register.errors.phoneExists"
+        )
+    
+    def output_errors_user_data_duplicate(self) -> None:
+        raise HTTPException(
+            status_code=400,
+            detail="account.register.errors.userDataDuplicate"
+        )
+    
+    def output_errors_invalid_data(self) -> None:
+        raise HTTPException(
+            status_code=400,
+            detail="account.register.errors.invalidData"
         )

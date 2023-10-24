@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from src.domain.base.mapper import Mapper
 
 from src.domain.account.user import User
@@ -8,6 +10,7 @@ from src.app.util.date_time_util import DateTimeUtil
 
 class AccountJsonMapper(Mapper[UserPostRequest, User | UserPostResponse]):
     def mapToDomain(self, param: UserPostRequest) -> User:
+        now = datetime.now()
         return User(
             id = "",
             avatar = param.avatar,
@@ -22,8 +25,8 @@ class AccountJsonMapper(Mapper[UserPostRequest, User | UserPostResponse]):
             ID_document = "",
             ID_document_verified_at = None,
             is_active = True,
-            created_at = DateTimeUtil.string_to_date(param.created_at),
-            updated_at = DateTimeUtil.string_to_date(param.updated_at)
+            created_at = now,
+            updated_at = now,
         )
 
     def mapFromDomain(self, param: User) -> UserPostResponse:
@@ -40,6 +43,6 @@ class AccountJsonMapper(Mapper[UserPostRequest, User | UserPostResponse]):
             ID_document = param.ID_document,
             ID_document_verified_at = param.ID_document_verified_at,
             is_active = param.is_active,
-            created_at = DateTimeUtil.date_to_iso_string(param.created_at),
-            updated_at = DateTimeUtil.date_to_iso_string(param.updated_at)
+            created_at = DateTimeUtil.date_to_string(param.created_at),
+            updated_at = DateTimeUtil.date_to_string(param.updated_at)
         )

@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, validator
+from pydantic import BaseModel, EmailStr, Field, validator
 
 class UserPostRequest(BaseModel):
     id: str = ""
@@ -6,10 +6,9 @@ class UserPostRequest(BaseModel):
     first_name: str
     last_name: str
     email: EmailStr
-    phone: str
+    phone: str = Field(unique=True)
     password: str
     password_confirmation: str
-    is_active: bool
     created_at: str
     updated_at: str
 
@@ -18,3 +17,4 @@ class UserPostRequest(BaseModel):
         if 'password' in values and v != values['password']:
             raise ValueError('register.error.passwordMismatch')
         return v
+ 

@@ -18,7 +18,7 @@ class UserORM(Base):
     phone_verified_at = Column(DateTime, nullable=True)
     ID_document = Column(String, nullable=True)
     ID_document_verified_at = Column(DateTime, nullable=True)
-    is_active = Column(Boolean(), default=True)
+    is_active = Column(Boolean(), default=0, nullable=False)
     created_at = Column(DateTime)
     updated_at = Column(DateTime)
 

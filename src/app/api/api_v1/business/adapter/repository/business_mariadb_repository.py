@@ -17,6 +17,10 @@ class BusinessMariaDbRepository(Repository[BusinessORM, Business], IBusinessRepo
         self.db = db
         self.mapper = mapper
 
+    def get(self, id: int | str) -> Business:
+        orm: BusinessORM =  self.db.query(BusinessORM).get(id)
+        return self.mapper.mapToDomain(orm)
+
     def find_locations(self):
         pass
 

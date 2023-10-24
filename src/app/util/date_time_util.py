@@ -1,8 +1,11 @@
-from datetime import datetime
+from datetime import datetime, date
 
 class DateTimeUtil:
+
+    default_format = '%Y-%m-%dT%H:%M:%S'
+
     @staticmethod
-    def string_to_date(date_str: str, format: str = '%Y-%m-%dT%H:%M:%S') -> datetime:
+    def string_to_date(date_str: str, format: str = default_format) -> datetime:
         return datetime.strptime(date_str, format)
 
     @staticmethod
@@ -10,5 +13,13 @@ class DateTimeUtil:
         return date.isoformat()
 
     @staticmethod
-    def date_to_string(date: datetime, format: str = '%Y-%m-%dT%H:%M:%S') -> str:
+    def date_to_string(date: datetime, format: str = default_format) -> str:
         return date.strftime(format)
+
+    @staticmethod
+    def is_valid_date_string(date_string: str) -> bool:
+        try:
+            date.fromisoformat(date_string)
+            return True
+        except ValueError:
+            return False

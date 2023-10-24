@@ -20,6 +20,7 @@ class Crypto(ICrypto):
             delta = timedelta(seconds=expires_duration)
         now = datetime.utcnow()
         expires = now + delta
+        print(f"delta: {delta} expires: {expires}")
         exp = expires.timestamp()
         encoded_jwt = jwt.encode(
             {"exp": exp, "nbf": now, "sub": subject}, settings.APP_KEY, algorithm=settings.CRYPT_ALGORITHM,
@@ -31,5 +32,7 @@ class Crypto(ICrypto):
         try:
             decoded_token = jwt.decode(token, settings.APP_KEY, algorithms=[settings.CRYPT_ALGORITHM])
             return decoded_token["sub"]
-        except jwt.JWTError:
+        except jwt.JWTError as e:
+            from loguru import logger
+            logger.error(e)
             return None
